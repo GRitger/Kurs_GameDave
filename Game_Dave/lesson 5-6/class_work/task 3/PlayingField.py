@@ -6,7 +6,7 @@ class PlayingField:
         self.h = h
         self.field = [[0] * w for _ in range(h)]  # [[0] * w] * h
 
-        self.left = 10
+        self.left = 300
         self.top = 10
         self.cell_size = 30
 
