@@ -140,6 +140,7 @@ class Ghost(Sprite):
         self.image = self.frames[self.cur_frame]
         self.rect = self.rect.move(x, y)
         self.pos = [x // SIZE_SP, y // SIZE_SP]
+        
 
 
     def update(self):
@@ -191,6 +192,13 @@ def terminate():
 def start_game_inf():
     pass
 
+def conflict(ghost, hero):
+    x, y =  hero.pos
+    x = x * 50 + 20
+    y = y * 50 + 20
+    conf = ghost.rect.collidepoint(x, y)
+    return conf
+
 def mov( ghost, level_map, bydnapravlenie, napravlen, napravlenie ):
     x, y = ghost.pos
     if level_map[y][ x-1 ] == '.':
@@ -236,20 +244,20 @@ def move(hero, movement, level_map):
     if movement == "Left" and level_map[y][x-1] == '.':
         hero.pos[0] -=1
         hero.move(-50, 0)    
-        print("left")
+        #print("left")
     elif movement == "Down"and level_map[y+1][x] == '.':
         hero.pos[1] +=1
         hero.move(0, 50) 
-        print("Down")
+        #print("Down")
         #Pacman(hero_group, x * SIZE_SP, y * SIZE_SP)
     elif movement == "Right"and level_map[y][x+1] == '.':
         hero.pos[0] +=1
         hero.move(50, 0)
-        print("Right")
+        #print("Right")
     elif movement == "Up"and level_map[y-1][x] == '.':
         hero.pos[1] -=1
         hero.move(0, -50)
-        print("Up")
+        #print("Up")
 
 def start_game():
     level_map = load_level("level_1.map")
@@ -290,11 +298,14 @@ def start_game():
         napravlen = mov(ghost, level_map, bydnapravlenie, napravlen, napravlenie)
         ghost_group.draw(screen)
         ghost_group.update()
+        conf = conflict(ghost, hero)
         hero_group.draw(screen)
         hero_group.update()
         block_group.draw(screen )
         screen.blit(text, (max_x * SIZE_SP - text.get_width() + 10, 10))
         pygame.display.flip()
+        if conf:
+            print("Game over")
         clock.tick(FPS)
 
 
@@ -319,6 +330,9 @@ if __name__ == '__main__':
     hero_group = pygame.sprite.Group()
     block_group = pygame.sprite.Group()
     dot_group = pygame.sprite.Group()
+
+    gost = Ghost
+    pacm = Pacman
 
     if mode == 1:
         start_game_inf()
