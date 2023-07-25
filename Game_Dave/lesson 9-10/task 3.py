@@ -1,6 +1,7 @@
 from random import choice
 
 import pygame
+import sqlalchemy
 import os, sys
 
 SIZE_SP = 50
